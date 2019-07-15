@@ -1,5 +1,26 @@
 <resources>
     <string name="app_name">BakingApp</string>
 
+    <string name="recipe_list">recipe list</string>
+    <string name="recipe_position">recipe_position</string>
     <string name="recipe">recipe</string>
+    <string name="recipe_name">recipe name</string>
+
+
+    <string name="recipe_ingredients">recipe ingredients</string>
+    <string name="recipe_steps">recipe steps</string>
+
+    <string name="ingredient_sample">ingredient sample</string>
+    <string name="ingredient">ingredient</string>
+
+    <string name="quantity">quantity</string>
+    <string name="quantity_sample">5</string>
+
+    <string name="measure">measure</string>
+    <string name="measure_sample">CUP</string>
+
+
+
+
+
 </resources>

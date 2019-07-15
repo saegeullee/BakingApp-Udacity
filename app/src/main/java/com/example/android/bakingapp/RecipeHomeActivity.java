@@ -1,5 +1,7 @@
 package com.example.android.bakingapp;
 
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -7,13 +9,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
+import com.example.android.bakingapp.models.Step;
 import com.example.android.bakingapp.utils.NetworkRequestGenerator;
 import com.example.android.bakingapp.utils.RecipesApiJsonUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,6 +32,8 @@ public class RecipeHomeActivity extends AppCompatActivity
 
     private RecyclerView mRecipeRecyclerView;
     private RecipeAdapter mAdapter;
+
+    private List<Recipe> mRecipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +67,10 @@ public class RecipeHomeActivity extends AppCompatActivity
 
                 Log.d(TAG, "onResponse: result1 : " + result);
                 try {
-                    List<Recipe> recipes = RecipesApiJsonUtils.getRecipesFromJson(result);
-                    mAdapter.setRecipes(recipes);
+                    mRecipes = RecipesApiJsonUtils.getRecipesFromJson(result);
+                    mAdapter.setRecipes(mRecipes);
 
-                    Log.d(TAG, "onResponse: recipes : " + recipes.toString());
+                    Log.d(TAG, "onResponse: recipes : " + mRecipes.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -79,6 +86,15 @@ public class RecipeHomeActivity extends AppCompatActivity
 
     @Override
     public void onRecipeItemClicked(int position) {
+
+        Recipe recipe = mRecipes.get(position);
+        Log.d(TAG, "onRecipeItemClicked: recipe : " + recipe.toString());
+
+        Intent intent = new Intent(RecipeHomeActivity.this, RecipeDetailsActivity.class);
+        intent.putExtra(getString(R.string.recipe_name), recipe.getName());
+        intent.putParcelableArrayListExtra(getString(R.string.recipe_ingredients), (ArrayList<Ingredient>) mRecipes.get(position).getIngredients());
+        intent.putParcelableArrayListExtra(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipes.get(position).getSteps());
+        startActivity(intent);
 
     }
 
