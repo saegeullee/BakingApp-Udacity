@@ -9,6 +9,10 @@
 
     <string name="recipe_ingredients">recipe ingredients</string>
     <string name="recipe_steps">recipe steps</string>
+    <string name="step">step</string>
+    <string name="step_short_description">step short description</string>
+
+
 
     <string name="ingredient_sample">ingredient sample</string>
     <string name="ingredient">ingredient</string>
