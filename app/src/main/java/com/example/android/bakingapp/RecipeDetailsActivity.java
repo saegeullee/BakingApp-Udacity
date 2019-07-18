@@ -24,8 +24,11 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     private List<Step> mSteps;
     private FragmentManager mFragmentManager;
     private RecipeDetailsFragment mDetailsFragment;
+    private RecipeStepFragment mStepFragmentForTwoPane;
 
     private boolean mIsUserCurrentLocationStepFragment;
+
+    private boolean mIsTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,15 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     }
 
     private void initUI() {
+
+        if(findViewById(R.id.recipe_step_container) != null) {
+
+            mIsTwoPane = true;
+
+        } else {
+
+            mIsTwoPane = false;
+        }
 
         mIsUserCurrentLocationStepFragment = false;
 
@@ -63,8 +75,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
 
         }
 
-        // Fragment 열어라
-
         mDetailsFragment = new RecipeDetailsFragment();
         mFragmentManager = getSupportFragmentManager();
 
@@ -78,25 +88,63 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
                 .replace(R.id.container, mDetailsFragment)
                 .commit();
 
+        if(mIsTwoPane) {
+
+            mStepFragmentForTwoPane = new RecipeStepFragment();
+
+            Bundle bundle1 = new Bundle();
+            bundle1.putInt(getString(R.string.step_number), 0);
+            bundle1.putParcelableArrayList(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipe.getSteps());
+
+            mStepFragmentForTwoPane.setArguments(bundle1);
+
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.recipe_step_container, mStepFragmentForTwoPane)
+                    .commit();
+
+        }
+
     }
 
     @Override
     public void onStepsItemClicked(int position) {
 
-        mIsUserCurrentLocationStepFragment = true;
-
         Log.d(TAG, "onStepsItemClicked: step : " + position + 1);
-        RecipeStepFragment stepFragment = new RecipeStepFragment();
 
-        Bundle bundle = new Bundle();
-        bundle.putInt(getString(R.string.step_number), position);
-        bundle.putParcelableArrayList(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipe.getSteps());
+        if(mIsTwoPane) {
 
-        stepFragment.setArguments(bundle);
+            if(mStepFragmentForTwoPane != null) {
+                mStepFragmentForTwoPane = null;
 
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, stepFragment)
-                .commit();
+                mStepFragmentForTwoPane = new RecipeStepFragment();
+
+                Bundle bundle1 = new Bundle();
+                bundle1.putInt(getString(R.string.step_number), position);
+                bundle1.putParcelableArrayList(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipe.getSteps());
+
+                mStepFragmentForTwoPane.setArguments(bundle1);
+
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.recipe_step_container, mStepFragmentForTwoPane)
+                        .commit();
+            }
+
+        } else {
+
+            mIsUserCurrentLocationStepFragment = true;
+
+            RecipeStepFragment stepFragment = new RecipeStepFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putInt(getString(R.string.step_number), position);
+            bundle.putParcelableArrayList(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipe.getSteps());
+
+            stepFragment.setArguments(bundle);
+
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.container, stepFragment)
+                    .commit();
+        }
 
     }
 

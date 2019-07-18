@@ -156,9 +156,11 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
 
     public void realisePlayer() {
         Log.d(TAG, "realisePlayer: player realised");
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if(mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     @Override
