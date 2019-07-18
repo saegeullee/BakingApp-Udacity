@@ -40,7 +40,7 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
 
     private SimpleExoPlayerView mPlayerView;
     private SimpleExoPlayer mExoPlayer;
-    private TextView mStepDescription, mStepShortDescription;
+    private TextView mStepDescription, mStepShortDescription, mStepNavigationNotice;
     private Button mNextStepBtn, mPrevStepBtn;
 
     @Nullable
@@ -62,6 +62,7 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
         mPlayerView = rootView.findViewById(R.id.exo_player);
         mStepDescription = rootView.findViewById(R.id.step_description);
         mStepShortDescription = rootView.findViewById(R.id.step_short_description);
+        mStepNavigationNotice = rootView.findViewById(R.id.step_navigation_notice);
         mNextStepBtn = rootView.findViewById(R.id.next_step_btn);
         mPrevStepBtn = rootView.findViewById(R.id.prev_step_btn);
         mNextStepBtn.setOnClickListener(this);
@@ -80,9 +81,11 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
             mPrevStepBtn.setEnabled(false);
         } else {
             mPrevStepBtn.setEnabled(true);
-            mPrevStepBtn.setEnabled(true);
+            mNextStepBtn.setEnabled(true);
         }
 
+        String navigation_notice = (position+1) + "/" + mStepsLength;
+        mStepNavigationNotice.setText(navigation_notice);
         mStepDescription.setText(mSteps.get(position).getDescription());
         mStepShortDescription.setText(mSteps.get(position).getShortDescription());
 
@@ -164,4 +167,6 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
         super.onDestroy();
         realisePlayer();
     }
+
+
 }

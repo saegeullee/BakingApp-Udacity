@@ -69,6 +69,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/prev_step_btn" />
 
+    <TextView
+        android:id="@+id/step_navigation_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/step_navigation_sample"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/prev_step_btn"
+        app:layout_constraintEnd_toStartOf="@+id/next_step_btn"
+        app:layout_constraintStart_toEndOf="@+id/prev_step_btn"
+        app:layout_constraintTop_toTopOf="@+id/prev_step_btn" />
+
     <Button
         android:id="@+id/prev_step_btn"
         android:layout_width="wrap_content"

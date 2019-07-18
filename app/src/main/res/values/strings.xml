@@ -16,8 +16,7 @@
     <string name="step_description">step description</string>
     <string name="step_next_button">next step</string>
     <string name="step_previous_button">prev step</string>
-
-
+    <string name="step_navigation_sample">1/7</string>
 
     <string name="ingredient_sample">ingredient sample</string>
     <string name="ingredient">ingredient</string>

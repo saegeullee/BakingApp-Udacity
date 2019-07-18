@@ -23,6 +23,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     private Recipe mRecipe;
     private List<Step> mSteps;
     private FragmentManager mFragmentManager;
+    private RecipeDetailsFragment mDetailsFragment;
+
+    private boolean mIsUserCurrentLocationStepFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     }
 
     private void initUI() {
+
+        mIsUserCurrentLocationStepFragment = false;
 
         mRecipe = new Recipe();
 
@@ -60,7 +65,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
 
         // Fragment 열어라
 
-        RecipeDetailsFragment detailsFragment = new RecipeDetailsFragment();
+        mDetailsFragment = new RecipeDetailsFragment();
         mFragmentManager = getSupportFragmentManager();
 
         Bundle bundle = new Bundle();
@@ -68,15 +73,17 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
         bundle.putParcelableArrayList(getString(R.string.recipe_ingredients), (ArrayList<Ingredient>) mRecipe.getIngredients());
         bundle.putParcelableArrayList(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipe.getSteps());
 
-        detailsFragment.setArguments(bundle);
+        mDetailsFragment.setArguments(bundle);
         mFragmentManager.beginTransaction()
-                .replace(R.id.container, detailsFragment)
+                .replace(R.id.container, mDetailsFragment)
                 .commit();
 
     }
 
     @Override
     public void onStepsItemClicked(int position) {
+
+        mIsUserCurrentLocationStepFragment = true;
 
         Log.d(TAG, "onStepsItemClicked: step : " + position + 1);
         RecipeStepFragment stepFragment = new RecipeStepFragment();
@@ -91,5 +98,22 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
                 .replace(R.id.container, stepFragment)
                 .commit();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: in");
+
+        if(mIsUserCurrentLocationStepFragment) {
+            mFragmentManager.beginTransaction()
+                    .replace(R.id.container, mDetailsFragment)
+                    .commit();
+            
+            mIsUserCurrentLocationStepFragment = false;
+        } else {
+            Log.d(TAG, "onBackPressed: super.onBackPressed");
+            super.onBackPressed();
+        }
+        
     }
 }
