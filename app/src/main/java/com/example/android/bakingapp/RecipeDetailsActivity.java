@@ -22,6 +22,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
 
     private Recipe mRecipe;
     private List<Step> mSteps;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
         // Fragment 열어라
 
         RecipeDetailsFragment detailsFragment = new RecipeDetailsFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
 
         Bundle bundle = new Bundle();
         bundle.putString(getString(R.string.recipe_name), mRecipe.getName());
@@ -68,7 +69,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
         bundle.putParcelableArrayList(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipe.getSteps());
 
         detailsFragment.setArguments(bundle);
-        fragmentManager.beginTransaction()
+        mFragmentManager.beginTransaction()
                 .replace(R.id.container, detailsFragment)
                 .commit();
 
@@ -77,8 +78,18 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     @Override
     public void onStepsItemClicked(int position) {
 
-        Step step = mSteps.get(position);
-        Log.d(TAG, "onStepsItemClicked: step : " + step.toString());
+        Log.d(TAG, "onStepsItemClicked: step : " + position + 1);
+        RecipeStepFragment stepFragment = new RecipeStepFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(getString(R.string.step_number), position);
+        bundle.putParcelableArrayList(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipe.getSteps());
+
+        stepFragment.setArguments(bundle);
+
+        mFragmentManager.beginTransaction()
+                .replace(R.id.container, stepFragment)
+                .commit();
 
     }
 }
