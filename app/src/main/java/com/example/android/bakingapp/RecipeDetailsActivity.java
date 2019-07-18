@@ -1,18 +1,19 @@
 package com.example.android.bakingapp;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.LinearLayout;
 
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeDetailsActivity extends AppCompatActivity implements RecipeStepsAdapter.OnStepsItemClickListener {
@@ -20,13 +21,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
     private static final String TAG = "RecipeDetailsActivity";
 
     private Recipe mRecipe;
-
-    private RecyclerView mIngredientsRecyclerView;
-    private RecipeIngredientsAdapter mIngredientsAdapter;
-
-    private RecyclerView mStepsRecyclerView;
-    private RecipeStepsAdapter mStepsAdapter;
-
     private List<Step> mSteps;
 
     @Override
@@ -35,7 +29,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
         setContentView(R.layout.activity_recipe_details);
 
         initUI();
-        setDataToViews();
+
     }
 
     private void initUI() {
@@ -63,37 +57,21 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
 
         }
 
-        mIngredientsRecyclerView = findViewById(R.id.recipe_ingredients_recyclerview);
-        LinearLayoutManager linearLayout = new LinearLayoutManager(this);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, linearLayout.getOrientation());
-        mIngredientsRecyclerView.setLayoutManager(linearLayout);
-        mIngredientsRecyclerView.addItemDecoration(dividerItemDecoration);
-        mIngredientsRecyclerView.setNestedScrollingEnabled(false);
+        // Fragment 열어라
 
-        mIngredientsAdapter = new RecipeIngredientsAdapter();
-        mIngredientsRecyclerView.setAdapter(mIngredientsAdapter);
+        RecipeDetailsFragment detailsFragment = new RecipeDetailsFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        mStepsRecyclerView = findViewById(R.id.recipe_steps_recyclerview);
-        LinearLayoutManager stepsLinearLayout = new LinearLayoutManager(this);
-        DividerItemDecoration stepsDividerItemDecoration = new DividerItemDecoration(this, stepsLinearLayout.getOrientation());
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.recipe_name), mRecipe.getName());
+        bundle.putParcelableArrayList(getString(R.string.recipe_ingredients), (ArrayList<Ingredient>) mRecipe.getIngredients());
+        bundle.putParcelableArrayList(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipe.getSteps());
 
-        mStepsRecyclerView.setLayoutManager(stepsLinearLayout);
-        mStepsRecyclerView.addItemDecoration(stepsDividerItemDecoration);
-        mStepsRecyclerView.setNestedScrollingEnabled(false);
+        detailsFragment.setArguments(bundle);
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, detailsFragment)
+                .commit();
 
-        mStepsAdapter = new RecipeStepsAdapter(this);
-        mStepsRecyclerView.setAdapter(mStepsAdapter);
-
-    }
-
-    private void setDataToViews() {
-
-        if(mRecipe != null) {
-
-            mIngredientsAdapter.setIngredients(mRecipe.getIngredients());
-            mStepsAdapter.setSteps(mRecipe.getSteps());
-
-        }
     }
 
     @Override
