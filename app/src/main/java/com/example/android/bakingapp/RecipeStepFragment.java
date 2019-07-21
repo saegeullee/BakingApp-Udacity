@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.models.Step;
@@ -42,6 +43,7 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
     private SimpleExoPlayer mExoPlayer;
     private TextView mStepDescription, mStepShortDescription, mStepNavigationNotice;
     private Button mNextStepBtn, mPrevStepBtn;
+    private ImageView mDefaultExoPlayerImage;
 
     @Nullable
     @Override
@@ -60,6 +62,7 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
         Log.d(TAG, "onCreateView: position : " + position);
 
         mPlayerView = rootView.findViewById(R.id.exo_player);
+        mDefaultExoPlayerImage = rootView.findViewById(R.id.exoplayer_default_image);
         mStepDescription = rootView.findViewById(R.id.step_description);
         mStepShortDescription = rootView.findViewById(R.id.step_short_description);
         mStepNavigationNotice = rootView.findViewById(R.id.step_navigation_notice);
@@ -94,19 +97,23 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
 
                 Log.d(TAG, "getExoPlayerReady: both null null");
 
+                mDefaultExoPlayerImage.setVisibility(View.VISIBLE);
+
                 if(mExoPlayer != null) {
                     realisePlayer();
                 }
 
-                mPlayerView.setDefaultArtwork(
-                        BitmapFactory.decodeResource(getResources(),
-                                R.drawable.ic_launcher_background)
-                );
+//                mPlayerView.setDefaultArtwork(
+//                        BitmapFactory.decodeResource(getResources(),
+//                                R.drawable.ic_launcher_background)
+//                );
 
             } else {
+                mDefaultExoPlayerImage.setVisibility(View.GONE);
                 initializeExoPlayer(Uri.parse(mSteps.get(position).getThumbnailUrl()));
             }
         } else {
+            mDefaultExoPlayerImage.setVisibility(View.GONE);
             initializeExoPlayer(Uri.parse(mSteps.get(position).getVideoUrl()));
         }
     }
