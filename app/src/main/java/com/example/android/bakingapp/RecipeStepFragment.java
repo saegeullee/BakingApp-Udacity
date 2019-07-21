@@ -1,6 +1,5 @@
 package com.example.android.bakingapp;
 
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -71,12 +70,12 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
         mNextStepBtn.setOnClickListener(this);
         mPrevStepBtn.setOnClickListener(this);
 
-        getExoPlayerReady(mCurrentStep);
+        getCertainRecipeStepReady(mCurrentStep);
 
         return rootView;
     }
 
-    private void getExoPlayerReady(int position) {
+    private void getCertainRecipeStepReady(int position) {
 
         if(position == mStepsLength - 1) {
             mNextStepBtn.setEnabled(false);
@@ -95,7 +94,7 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
         if(mSteps.get(position).getVideoUrl().equals("")) {
             if(mSteps.get(position).getThumbnailUrl().equals("")) {
 
-                Log.d(TAG, "getExoPlayerReady: both null null");
+                Log.d(TAG, "getCertainRecipeStepReady: both null null");
 
                 mDefaultExoPlayerImage.setVisibility(View.VISIBLE);
 
@@ -147,12 +146,12 @@ public class RecipeStepFragment extends Fragment implements View.OnClickListener
             case R.id.next_step_btn:
 
                 mCurrentStep += 1;
-                getExoPlayerReady(mCurrentStep);
+                getCertainRecipeStepReady(mCurrentStep);
                 return;
 
             case R.id.prev_step_btn:
                 mCurrentStep -= 1;
-                getExoPlayerReady(mCurrentStep);
+                getCertainRecipeStepReady(mCurrentStep);
                 return;
 
             default:
