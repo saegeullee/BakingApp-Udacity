@@ -57,6 +57,8 @@ public class RecipeDetailsFragment extends Fragment {
         mRecipe.setIngredients(ingredients);
         mRecipe.setSteps(mSteps);
 
+        DisplayIngredientsService.startDisplayIngredients(getActivity(), mRecipe);
+
         Log.d(TAG, "onCreateView: mRecipe : " + mRecipe.toString());
 
         mIngredientsRecyclerView = rootView.findViewById(R.id.recipe_ingredients_recyclerview);

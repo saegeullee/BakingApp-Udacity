@@ -65,7 +65,6 @@ public class RecipeHomeActivity extends AppCompatActivity
             @Override
             public void onResponse(Call call, Response response) {
 
-
                 String result = new Gson().toJson(response.body());
 
                 Log.d(TAG, "onResponse: result1 : " + result);
