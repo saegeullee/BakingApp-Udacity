@@ -20,8 +20,11 @@ public class Recipe implements Parcelable {
         this.steps = steps;
     }
 
+
     protected Recipe(Parcel in) {
         name = in.readString();
+        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        steps = in.createTypedArrayList(Step.CREATOR);
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -77,5 +80,7 @@ public class Recipe implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeTypedList(ingredients);
+        dest.writeTypedList(steps);
     }
 }
