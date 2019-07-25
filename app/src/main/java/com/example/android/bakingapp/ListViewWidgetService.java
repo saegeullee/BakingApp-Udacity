@@ -1,26 +1,14 @@
 package com.example.android.bakingapp;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
-import com.example.android.bakingapp.utils.NetworkRequestGenerator;
-import com.example.android.bakingapp.utils.RecipesApiJsonUtils;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ListViewWidgetService extends RemoteViewsService {
 
@@ -38,8 +26,8 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
     private int mAppWidgetId;
     private List<Ingredient> mIngredients;
 
-    public ListViewRemoteViewsFactory(Context mContext, Intent intent) {
-        this.mContext = mContext;
+    public ListViewRemoteViewsFactory(Context context, Intent intent) {
+        this.mContext = context;
         Recipe recipe = intent.getParcelableExtra(RecipeWidgetProvider.EXTRA_RECIPE);
         mIngredients = (recipe != null) ? recipe.getIngredients() : new ArrayList<Ingredient>();
         Log.d(TAG, "ListViewRemoteViewsFactory: mIngredients : " + mIngredients.toString());
@@ -47,12 +35,12 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
     @Override
     public void onCreate() {
-
+        Log.d(TAG, "onCreate: in");
     }
 
     @Override
     public void onDataSetChanged() {
-        Log.d(TAG, "onDataSetChanged: ");
+        Log.d(TAG, "onDataSetChanged: in");
     }
 
     @Override
@@ -68,6 +56,8 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
     @Override
     public RemoteViews getViewAt(int position) {
+
+        Log.d(TAG, "getViewAt: in");
 
         if(mIngredients == null || mIngredients.size() == 0) return null;
 
@@ -97,6 +87,6 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
     @Override
     public boolean hasStableIds() {
-        return false;
+        return true;
     }
 }
