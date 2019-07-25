@@ -1,6 +1,10 @@
 package com.example.android.bakingapp;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -11,6 +15,7 @@ import android.util.Log;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
+import com.example.android.bakingapp.testing.SimpleIdlingResource;
 import com.example.android.bakingapp.utils.NetworkRequestGenerator;
 import com.example.android.bakingapp.utils.RecipesApiJsonUtils;
 import com.google.gson.Gson;
@@ -38,6 +43,8 @@ public class RecipeHomeActivity extends AppCompatActivity
 
     private List<Recipe> mRecipes;
 
+    @Nullable private SimpleIdlingResource mIdlingResource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +68,10 @@ public class RecipeHomeActivity extends AppCompatActivity
 
     private void getRecipesFromApi() {
 
+        if(mIdlingResource != null) {
+            mIdlingResource.setIdleState(false);
+        }
+
         getRecipes().enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
@@ -71,6 +82,10 @@ public class RecipeHomeActivity extends AppCompatActivity
                 try {
                     mRecipes = RecipesApiJsonUtils.getRecipesFromJson(result);
                     mAdapter.setRecipes(mRecipes);
+
+                    if(mIdlingResource != null) {
+                        mIdlingResource.setIdleState(true);
+                    }
 
                     Log.d(TAG, "onResponse: recipes : " + mRecipes.toString());
                 } catch (JSONException e) {
@@ -101,4 +116,14 @@ public class RecipeHomeActivity extends AppCompatActivity
     private Call getRecipes() {
         return NetworkRequestGenerator.getRecipesApi().getRecipes();
     }
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if(mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
 }
