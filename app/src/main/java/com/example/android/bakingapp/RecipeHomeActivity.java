@@ -93,9 +93,7 @@ public class RecipeHomeActivity extends AppCompatActivity
         Log.d(TAG, "onRecipeItemClicked: recipe : " + recipe.toString());
 
         Intent intent = new Intent(RecipeHomeActivity.this, RecipeDetailsActivity.class);
-        intent.putExtra(getString(R.string.recipe_name), recipe.getName());
-        intent.putParcelableArrayListExtra(getString(R.string.recipe_ingredients), (ArrayList<Ingredient>) mRecipes.get(position).getIngredients());
-        intent.putParcelableArrayListExtra(getString(R.string.recipe_steps), (ArrayList<Step>) mRecipes.get(position).getSteps());
+        intent.putExtra(getString(R.string.recipe), recipe);
         startActivity(intent);
 
     }

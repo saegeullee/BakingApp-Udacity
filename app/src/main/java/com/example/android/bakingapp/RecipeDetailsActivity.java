@@ -55,23 +55,18 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeSt
         mRecipe = new Recipe();
 
         Intent intent = getIntent();
-        if(intent.hasExtra(getString(R.string.recipe_name)) &&
-                intent.hasExtra(getString(R.string.recipe_ingredients)) &&
-                intent.hasExtra(getString(R.string.recipe_steps))) {
+        if(intent.hasExtra(getString(R.string.recipe))) {
 
-            String recipe_name = intent.getStringExtra(getString(R.string.recipe_name));
-            List<Ingredient> ingredients = intent.getParcelableArrayListExtra(getString(R.string.recipe_ingredients));
-            mSteps = intent.getParcelableArrayListExtra(getString(R.string.recipe_steps));
-
-            Log.d(TAG, "initUI: recipe name : " + recipe_name);
-            Log.d(TAG, "initUI: ingredients : " + ingredients.toString());
-            Log.d(TAG, "initUI: steps : " + mSteps.toString());
+            Recipe recipe = intent.getParcelableExtra(getString(R.string.recipe));
+            Log.d(TAG, "initUI:  recipe : " + recipe.toString());
+            List<Ingredient> ingredients = recipe.getIngredients();
+            mSteps = recipe.getSteps();
 
             mRecipe.setSteps(mSteps);
             mRecipe.setIngredients(ingredients);
-            mRecipe.setName(recipe_name);
+            mRecipe.setName(recipe.getName());
 
-            setTitle(recipe_name);
+            setTitle(recipe.getName());
 
         }
 
