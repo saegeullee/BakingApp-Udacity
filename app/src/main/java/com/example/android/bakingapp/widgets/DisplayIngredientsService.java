@@ -1,4 +1,4 @@
-package com.example.android.bakingapp;
+package com.example.android.bakingapp.widgets;
 
 import android.app.IntentService;
 import android.appwidget.AppWidgetManager;
@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.models.Recipe;
 
 public class DisplayIngredientsService extends IntentService {

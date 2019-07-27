@@ -31,10 +31,6 @@ public class RecipeHomeActivityScreenTest {
     @Rule
     public ActivityTestRule<RecipeHomeActivity> mActivityTestRule = new ActivityTestRule<>(RecipeHomeActivity.class);
 
-    @Rule
-    public ActivityTestRule<RecipeDetailsActivity> mDetailsActivityTestRule = new ActivityTestRule<>(RecipeDetailsActivity.class);
-
-
     @Test
     public void clickRecyclerViewItem_OpensRecipeDetailsActivity() {
 

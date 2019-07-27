@@ -1,20 +1,22 @@
-package com.example.android.bakingapp;
+package com.example.android.bakingapp.widgets;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.models.Ingredient;
-import com.example.android.bakingapp.models.Recipe;
-import java.util.ArrayList;
+import com.example.android.bakingapp.utils.SharedPrefManager;
 import java.util.List;
+
 
 public class ListViewWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new ListViewRemoteViewsFactory(this.getApplicationContext(), intent);
+        return new ListViewRemoteViewsFactory(this.getApplicationContext());
     }
 }
 
@@ -23,14 +25,11 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
     private static final String TAG = "ListViewRemoteViewsFact";
 
     private Context mContext;
-    private int mAppWidgetId;
     private List<Ingredient> mIngredients;
 
-    public ListViewRemoteViewsFactory(Context context, Intent intent) {
+    public ListViewRemoteViewsFactory(Context context) {
         this.mContext = context;
-        Recipe recipe = intent.getParcelableExtra(RecipeWidgetProvider.EXTRA_RECIPE);
-        mIngredients = (recipe != null) ? recipe.getIngredients() : new ArrayList<Ingredient>();
-        Log.d(TAG, "ListViewRemoteViewsFactory: mIngredients : " + mIngredients.toString());
+        Log.d(TAG, "ListViewRemoteViewsFactory: in");
     }
 
     @Override
@@ -41,6 +40,10 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
     @Override
     public void onDataSetChanged() {
         Log.d(TAG, "onDataSetChanged: in");
+
+        mIngredients = SharedPrefManager.getInstance(mContext).getIngredients();
+        Log.d(TAG, "onDataSetChanged: mIngredients : " + mIngredients.toString());
+
     }
 
     @Override
@@ -59,7 +62,10 @@ class ListViewRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
         Log.d(TAG, "getViewAt: in");
 
-        if(mIngredients == null || mIngredients.size() == 0) return null;
+        if(mIngredients == null || mIngredients.size() == 0) {
+            Log.d(TAG, "getViewAt: null");
+            return null;
+        }
 
         Ingredient ingredient = mIngredients.get(position);
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.recipe_ingredient_item_row);

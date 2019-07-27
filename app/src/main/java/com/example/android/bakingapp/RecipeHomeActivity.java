@@ -25,6 +25,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,9 +40,10 @@ public class RecipeHomeActivity extends AppCompatActivity
 
     private static final String TAG = "RecipeHomeActivity";
 
-    private RecyclerView mRecipeRecyclerView;
-    private RecipeAdapter mAdapter;
+    @BindView(R.id.recipe_recyclerview)
+    RecyclerView mRecipeRecyclerView;
 
+    private RecipeAdapter mAdapter;
     private List<Recipe> mRecipes;
 
     @Nullable private SimpleIdlingResource mIdlingResource;
@@ -56,7 +59,8 @@ public class RecipeHomeActivity extends AppCompatActivity
 
     private void initUI() {
 
-        mRecipeRecyclerView = findViewById(R.id.recipe_recyclerview);
+        ButterKnife.bind(this);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         DividerItemDecoration itemDecoration = new DividerItemDecoration(mRecipeRecyclerView.getContext(), layoutManager.getOrientation());
         mRecipeRecyclerView.setLayoutManager(layoutManager);

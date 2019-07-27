@@ -16,6 +16,9 @@ import android.view.ViewGroup;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
+import com.example.android.bakingapp.utils.SharedPrefConverterUtils;
+import com.example.android.bakingapp.utils.SharedPrefManager;
+import com.example.android.bakingapp.widgets.DisplayIngredientsService;
 
 import java.util.List;
 
@@ -56,8 +59,8 @@ public class RecipeDetailsFragment extends Fragment {
         mRecipe.setName(recipe_name);
         mRecipe.setIngredients(ingredients);
         mRecipe.setSteps(mSteps);
-
-        DisplayIngredientsService.startDisplayIngredients(getActivity(), mRecipe);
+        
+        saveIngredientsForWidgets(mRecipe);
 
         Log.d(TAG, "onCreateView: mRecipe : " + mRecipe.toString());
 
@@ -90,5 +93,12 @@ public class RecipeDetailsFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    private void saveIngredientsForWidgets(Recipe recipe) {
+
+        SharedPrefManager.getInstance(getActivity()).setRecipe(recipe);
+        DisplayIngredientsService.startDisplayIngredients(getActivity(), recipe);
+
     }
 }

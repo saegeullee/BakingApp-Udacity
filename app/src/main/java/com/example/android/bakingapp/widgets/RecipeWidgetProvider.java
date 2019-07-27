@@ -1,4 +1,4 @@
-package com.example.android.bakingapp;
+package com.example.android.bakingapp.widgets;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -7,7 +7,12 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementation of App Widget functionality.
@@ -21,38 +26,45 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     private static Recipe mRecipe;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, Recipe recipe) {
+                                int appWidgetId) {
 
         // Construct the RemoteViews object
-        RemoteViews views;
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
 
-        views = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
+        if(mRecipe != null)
+        views.setTextViewText(R.id.recipe_title, mRecipe.getName() + " ingredients");
 
         Intent intent = new Intent(context, ListViewWidgetService.class);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        mRecipe = (recipe != null) ? recipe : new Recipe();
-        intent.putExtra(EXTRA_RECIPE, mRecipe);
         Log.d(TAG, "updateAppWidget: mRecipe : " + mRecipe.toString());
+
+        /**
+         * 여기서 에러 발생했다.
+         * intent.putExtra() 를 통해 recipe 데이터를 ListViewWidgetService 로 전달하려 했지만
+         * 이렇게 작성시 problem loading widget 에러가 발생했다.
+         */
+
         views.setRemoteAdapter(R.id.list_view, intent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-
-    public static void updateAppWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, Recipe recipe) {
-
-        Log.d(TAG, "updateAppWidgets: recipe : " + recipe.toString());
-        for(int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId, recipe);
-        }
-    }
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-        Log.d(TAG, "onUpdate: in");
+        DisplayIngredientsService.startDisplayIngredients(context, mRecipe);
 
+    }
+
+
+    public static void updateAppWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds, Recipe recipe) {
+
+        mRecipe = recipe;
+
+        Log.d(TAG, "updateAppWidgets: recipe : " + recipe.toString());
+        for(int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId);
+        }
     }
 
 
@@ -65,5 +77,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
     }
+
 }
 
